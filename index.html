@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Find the Odd One Out!</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 20px;
+    }
+    h1 {
+        color: #ff4081;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    #grid {
+        display: grid;
+        gap: 5px;
+    }
+    .cell {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        background: white;
+        border: 1px solid #ddd;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    .cell:hover {
+        background: #e1f5fe;
+    }
+    #message {
+        margin-top: 15px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: green;
+        visibility: hidden;
+    }
+</style>
+</head>
+<body>
+
+<h1>Find the Odd One Out!</h1>
+<div id="grid"></div>
+<div id="message">You found it!</div>
+
+<script>
+    const gridSize = 10; // 10x10 grid
+    const gridElement = document.getElementById('grid');
+    const messageElement = document.getElementById('message');
+
+    // Characters to choose from
+    const characterPairs = [
+        ['2', 'S'],
+        ['O', 'Q'],
+        ['X', 'K'],
+        ['8', 'B'],
+        ['C', 'G']
+    ];
+
+    function createGrid() {
+        // Clear previous grid
+        gridElement.innerHTML = '';
+        messageElement.style.visibility = 'hidden';
+
+        // Set grid template for CSS
+        gridElement.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
+
+        // Pick a random character pair
+        const pair = characterPairs[Math.floor(Math.random() * characterPairs.length)];
+        const mainChar = pair[0];
+        const oddChar = pair[1];
+
+        // Pick random position for the odd character
+        const oddIndex = Math.floor(Math.random() * gridSize * gridSize);
+
+        // Fill the grid
+        for (let i = 0; i < gridSize * gridSize; i++) {
+            const cell = document.createElement('div');
+            cell.classList.add('cell');
+            cell.textContent = (i === oddIndex) ? oddChar : mainChar;
+
+            // Click event
+            cell.addEventListener('click', () => {
+                if (i === oddIndex) {
+                    messageElement.style.visibility = 'visible';
+                    setTimeout(createGrid, 1000); // Start new round after 1 second
+                }
+            });
+
+            gridElement.appendChild(cell);
+        }
+    }
+
+    // Start game
+    createGrid();
+</script>
+
+</body>
+</html>
